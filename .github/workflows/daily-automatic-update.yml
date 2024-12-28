@@ -50,10 +50,16 @@ jobs:
             fi
           done
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12' # Specify the Python version
+      - name: Install Wine and download Python
+        run: |
+          sudo apt update
+          sudo apt install -y wine
+          wget https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe
+
+      - name: Install Python using Wine
+        run: |
+          wine python-3.12.0-amd64.exe /quiet InstallAllUsers=1 PrependPath=1
+          wine python --version
 
       - name: Build
         run: dotnet build --configuration Release --no-restore

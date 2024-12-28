@@ -34,7 +34,7 @@ public class BuildLibraryUtil : IBuildLibraryUtil
     {
         string tempDir = _directoryUtil.CreateTempDirectory();
 
-        string pythonDir = "python";
+        string pythonDir = "wine python";
 
         _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", tempDir);
 
