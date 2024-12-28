@@ -3,6 +3,7 @@ using Soenneker.Git.Util.Registrars;
 using Soenneker.Runners.Whisper.CTranslate.Utils;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
 using Soenneker.Utils.Dotnet.NuGet.Registrars;
+using Soenneker.Utils.File.Registrars;
 using Soenneker.Utils.FileSync.Registrars;
 using Soenneker.Utils.SHA3.Registrars;
 
@@ -28,6 +29,7 @@ public static class Startup
         services.AddScoped<IFileOperationsUtil, FileOperationsUtil>();
         services.AddDotnetNuGetUtilAsScoped();
         services.AddScoped<IBuildLibraryUtil, BuildLibraryUtil>();
+        services.AddFileUtilAsScoped();
 
         return services;
     }

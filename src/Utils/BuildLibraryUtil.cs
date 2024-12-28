@@ -29,8 +29,6 @@ public class BuildLibraryUtil : IBuildLibraryUtil
 
         _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", tempDir);
 
-        await _processUtil.StartProcess("python.exe", tempDir, "-m ensurepip --upgrade", cancellationToken: cancellationToken);
-
         await _processUtil.StartProcess("python.exe", tempDir, "pip install setuptools wheel build pyinstaller", cancellationToken: cancellationToken);
 
         await _processUtil.StartProcess("python.exe", tempDir, "pip install -r requirements.txt", cancellationToken: cancellationToken);
