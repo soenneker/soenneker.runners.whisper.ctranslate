@@ -30,6 +30,7 @@ public static class Startup
         services.AddDotnetNuGetUtilAsScoped();
         services.AddScoped<IBuildLibraryUtil, BuildLibraryUtil>();
         services.AddFileUtilAsScoped();
+        services.AddScoped<IPythonImportConverter, PythonImportConverter>();
 
         return services;
     }

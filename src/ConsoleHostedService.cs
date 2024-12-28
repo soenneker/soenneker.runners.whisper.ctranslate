@@ -37,8 +37,8 @@ public class ConsoleHostedService : IHostedService
 
                 try
                 {
-                    await _buildLibraryUtil.Build(cancellationToken);
-                  //  await _fileOperationsUtil.Process(cancellationToken);
+                    string filePath = await _buildLibraryUtil.Build(cancellationToken);
+                    await _fileOperationsUtil.Process(filePath, cancellationToken);
 
                     _logger.LogInformation("Complete!");
 
