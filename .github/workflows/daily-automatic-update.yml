@@ -15,40 +15,43 @@ jobs:
 
   daily-automatic-update:
     runs-on: windows-latest
-  
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Setting up build version
+        shell: pwsh
         run: |
-          version=$(($GITHUB_RUN_NUMBER))
-          echo "BUILD_VERSION=3.0.$version" >> ${GITHUB_ENV}
+          $version = $env:GITHUB_RUN_NUMBER
+          "BUILD_VERSION=3.0.$version" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: '9.0.x'
 
       - name: Install dependencies with retry
+        shell: pwsh
         run: |
-          retries=5
-          base_wait_time=15
-          exponent=2
+          $retries = 5
+          $base_wait_time = 15
+          $exponent = 2
 
-          for i in $(seq 1 $retries); do
-            if dotnet restore; then
-              break
-            fi
+          for ($i = 1; $i -le $retries; $i++) {
+              if (dotnet restore) {
+                  break
+              }
 
-            if [ $i -lt $retries ]; then
-              wait_time=$(awk "BEGIN {print int($base_wait_time * ($exponent ^ ($i - 1)))}")
-              echo "dotnet restore failed, retrying in $wait_time seconds..."
-              sleep $wait_time
-            else
-              echo "dotnet restore failed after $retries retries."
-              exit 1
-            fi
-          done
+              if ($i -lt $retries) {
+                  $wait_time = [math]::Floor($base_wait_time * [math]::Pow($exponent, $i - 1))
+                  Write-Output "dotnet restore failed, retrying in $wait_time seconds..."
+                  Start-Sleep -Seconds $wait_time
+              }
+              else {
+                  Write-Output "dotnet restore failed after $retries retries."
+                  exit 1
+              }
+          }
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -56,7 +59,9 @@ jobs:
           python-version: '3.12' # Specify the Python version
 
       - name: Build
+        shell: pwsh
         run: dotnet build --configuration Release --no-restore
 
       - name: Run
+        shell: pwsh
         run: dotnet run --project src/Soenneker.Runners.Whisper.CTranslate.csproj --no-restore --verbosity normal --framework net9.0
