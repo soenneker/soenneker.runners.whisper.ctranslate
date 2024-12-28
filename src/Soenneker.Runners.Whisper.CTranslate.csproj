@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net9.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU</Platforms>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Description>Automatically updates the Soenneker.Whisper.CTranslate package</Description>
+        <Version Condition="'$(BUILD_VERSION)' == ''">3.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
+        <AssemblyName>Soenneker.Runners.Whisper.CTranslate</AssemblyName>
+        <PackageId>Soenneker.Runners.Whisper.CTranslate</PackageId>
+        <PackageTags>runners whisper ctranslate library ai ctranslate2 faster whisperctranslate runner csharp dotnet c# .net</PackageTags>
+        <Copyright>Copyright © 2024 Jake Soenneker</Copyright>
+        <Authors>Jake Soenneker</Authors>
+        <Company>https://soenneker.com</Company>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IsPackable>false</IsPackable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/soenneker/soenneker.runners.whisper.ctranslate</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/soenneker/soenneker.runners.whisper.ctranslate</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryBranch>main</RepositoryBranch>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\CONTRIBUTING.md" Link="CONTRIBUTING.md" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\LICENSE" Pack="true" PackagePath="\" />
+        <None Include="..\icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="3.0.729" />
+        <PackageReference Include="Soenneker.Git.Util" Version="3.0.2173" />
+        <PackageReference Include="Soenneker.Utils.Dotnet.NuGet" Version="3.0.1310" />
+        <PackageReference Include="Soenneker.Utils.Environment" Version="3.0.380" />
+        <PackageReference Include="Soenneker.Utils.FileSync" Version="3.0.1205" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.1208" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.0" />
+        <PackageReference Include="Soenneker.Extensions.Configuration" Version="3.0.579" />
+        <PackageReference Include="Soenneker.Utils.File" Version="3.0.1515" />
+        <PackageReference Include="Soenneker.Utils.SHA3" Version="3.0.980" />
+    </ItemGroup>
+</Project>
