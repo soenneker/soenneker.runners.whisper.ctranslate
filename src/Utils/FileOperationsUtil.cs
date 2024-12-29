@@ -64,7 +64,7 @@ public class FileOperationsUtil : IFileOperationsUtil
 
         _directoryUtil.CreateIfDoesNotExist(Path.Combine(gitDirectory, "src", "Resources"));
 
-        _fileUtilSync.Move(filePath, targetExePath);
+        _fileUtilSync.Copy(filePath, targetExePath);
 
         string projFilePath = Path.Combine(gitDirectory, "src", $"{Constants.Library}.csproj");
 
