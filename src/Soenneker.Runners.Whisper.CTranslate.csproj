@@ -46,14 +46,14 @@
     <ItemGroup>
         <PackageReference Include="Soenneker.Config.Realtime" Version="3.0.1" />
         <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="3.0.739" />
-        <PackageReference Include="Soenneker.Git.Util" Version="3.0.2199" />
+        <PackageReference Include="Soenneker.Git.Util" Version="3.0.2201" />
         <PackageReference Include="Soenneker.GitHub.Repositories.Releases" Version="3.0.1" />
-        <PackageReference Include="Soenneker.Utils.Dotnet.NuGet" Version="3.0.1327" />
+        <PackageReference Include="Soenneker.Utils.Dotnet.NuGet" Version="3.0.1329" />
         <PackageReference Include="Soenneker.Utils.Environment" Version="3.0.385" />
-        <PackageReference Include="Soenneker.Utils.FileSync" Version="3.0.1222" />
-        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.1223" />
+        <PackageReference Include="Soenneker.Utils.FileSync" Version="3.0.1225" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.1225" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-        <PackageReference Include="Soenneker.Utils.File" Version="3.0.1529" />
-        <PackageReference Include="Soenneker.Utils.SHA3" Version="3.0.992" />
+        <PackageReference Include="Soenneker.Utils.File" Version="3.0.1531" />
+        <PackageReference Include="Soenneker.Utils.SHA3" Version="3.0.993" />
     </ItemGroup>
 </Project>
