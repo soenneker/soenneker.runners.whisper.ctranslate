@@ -50,10 +50,10 @@
         <PackageReference Include="Soenneker.GitHub.Repositories.Releases" Version="3.0.15" />
         <PackageReference Include="Soenneker.Utils.Dotnet.NuGet" Version="3.0.1338" />
         <PackageReference Include="Soenneker.Utils.Environment" Version="3.0.392" />
-        <PackageReference Include="Soenneker.Utils.FileSync" Version="3.0.1225" />
-        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.1225" />
+        <PackageReference Include="Soenneker.Utils.FileSync" Version="3.0.1250" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.1239" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-        <PackageReference Include="Soenneker.Utils.File" Version="3.0.1531" />
-        <PackageReference Include="Soenneker.Utils.SHA3" Version="3.0.993" />
+        <PackageReference Include="Soenneker.Utils.File" Version="3.0.1539" />
+        <PackageReference Include="Soenneker.Utils.SHA3" Version="3.0.1001" />
     </ItemGroup>
 </Project>
