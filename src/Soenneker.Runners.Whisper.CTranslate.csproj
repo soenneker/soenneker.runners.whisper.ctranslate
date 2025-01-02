@@ -15,7 +15,7 @@
         <AssemblyName>Soenneker.Runners.Whisper.CTranslate</AssemblyName>
         <PackageId>Soenneker.Runners.Whisper.CTranslate</PackageId>
         <PackageTags>runners whisper ctranslate library ai ctranslate2 faster whisperctranslate runner csharp dotnet c# .net</PackageTags>
-        <Copyright>Copyright © 2024 Jake Soenneker</Copyright>
+        <Copyright>Copyright © 2024-2025 Jake Soenneker</Copyright>
         <Authors>Jake Soenneker</Authors>
         <Company>https://soenneker.com</Company>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
