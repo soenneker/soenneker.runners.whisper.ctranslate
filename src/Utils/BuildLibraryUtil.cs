@@ -38,6 +38,8 @@ public class BuildLibraryUtil : IBuildLibraryUtil
 
         await _processUtil.Start(python, tempDir, "-m pip install pip-review", waitForExit: true, cancellationToken: cancellationToken);
 
+        await _processUtil.Start(python, tempDir, "-m site", waitForExit: true, cancellationToken: cancellationToken);
+
         await _processUtil.Start(python, tempDir, "-m pip-review --local --auto", waitForExit: true, cancellationToken: cancellationToken);
 
         await _processUtil.Start(python, tempDir, "-m pip install setuptools wheel build PyInstaller", waitForExit: true, cancellationToken: cancellationToken);
