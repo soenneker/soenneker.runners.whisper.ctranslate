@@ -44,7 +44,7 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.Config.Realtime" Version="3.0.25" />
+        <PackageReference Include="Soenneker.Config.Realtime" Version="3.0.26" />
         <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="3.0.757" />
         <PackageReference Include="Soenneker.Git.Util" Version="3.0.2246" />
         <PackageReference Include="Soenneker.GitHub.Repositories.Releases" Version="3.0.22" />
