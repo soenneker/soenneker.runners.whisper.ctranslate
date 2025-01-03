@@ -3,6 +3,7 @@ using Soenneker.Git.Util.Abstract;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
 using Soenneker.Utils.Directory.Abstract;
 using Soenneker.Utils.Process.Abstract;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,9 @@ public class BuildLibraryUtil : IBuildLibraryUtil
     {
         string tempDir = _directoryUtil.CreateTempDirectory();
 
-        const string python = "python";
+        string python = await GetPythonPath();
+
+        _logger.LogInformation("Python path: {path}", python); 
 
         _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", tempDir);
 
@@ -57,5 +60,28 @@ public class BuildLibraryUtil : IBuildLibraryUtil
         await _processUtil.Start(python, tempDir, $"-m PyInstaller --onefile \"{entryScript}\"", waitForExit: true, cancellationToken: cancellationToken);
 
         return Path.Combine(tempDir, "dist", "whisper_ctranslate2.exe");
+    }
+
+    public static async ValueTask<string> GetPythonPath(string pythonCommand = "python")
+    {
+        var processStartInfo = new ProcessStartInfo
+        {
+            FileName = pythonCommand,
+            Arguments = "-c \"import sys; print(sys.executable)\"",
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        using (var process = new Process())
+        {
+            process.StartInfo = processStartInfo;
+            process.Start();
+
+            string output = await process.StandardOutput.ReadToEndAsync();
+            await process.WaitForExitAsync();
+
+            return output.Trim(); // The full path to Python
+        }
     }
 }
