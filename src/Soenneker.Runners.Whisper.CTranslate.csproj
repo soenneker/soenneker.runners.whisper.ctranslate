@@ -46,13 +46,8 @@
     <ItemGroup>
         <PackageReference Include="Soenneker.Config.Realtime" Version="3.0.28" />
         <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="3.0.759" />
-        <PackageReference Include="Soenneker.Git.Util" Version="3.0.2254" />
         <PackageReference Include="Soenneker.GitHub.Repositories.Releases" Version="3.0.30" />
-        <PackageReference Include="Soenneker.Utils.Dotnet.NuGet" Version="3.0.1355" />
-        <PackageReference Include="Soenneker.Utils.Environment" Version="3.0.396" />
-        <PackageReference Include="Soenneker.Utils.FileSync" Version="3.0.1271" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-        <PackageReference Include="Soenneker.Utils.File" Version="3.0.1553" />
-        <PackageReference Include="Soenneker.Utils.SHA3" Version="3.0.1013" />
+        <PackageReference Include="Soenneker.Managers.Runners" Version="3.0.3" />
     </ItemGroup>
 </Project>

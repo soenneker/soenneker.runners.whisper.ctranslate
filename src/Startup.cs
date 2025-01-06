@@ -1,12 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using Soenneker.Git.Util.Registrars;
 using Soenneker.GitHub.Repositories.Releases.Registrars;
+using Soenneker.Managers.Runners.Registrars;
 using Soenneker.Runners.Whisper.CTranslate.Utils;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
-using Soenneker.Utils.Dotnet.NuGet.Registrars;
-using Soenneker.Utils.File.Registrars;
-using Soenneker.Utils.FileSync.Registrars;
-using Soenneker.Utils.SHA3.Registrars;
 
 namespace Soenneker.Runners.Whisper.CTranslate;
 
@@ -24,13 +20,8 @@ public static class Startup
     public static IServiceCollection SetupIoC(this IServiceCollection services)
     {
         services.AddHostedService<ConsoleHostedService>();
-        services.AddSha3UtilAsScoped();
-        services.AddFileUtilSyncAsScoped();
-        services.AddGitUtilAsScoped();
-        services.AddScoped<IFileOperationsUtil, FileOperationsUtil>();
-        services.AddDotnetNuGetUtilAsScoped();
+        services.AddRunnersManagerAsScoped();
         services.AddScoped<IBuildLibraryUtil, BuildLibraryUtil>();
-        services.AddFileUtilAsScoped();
         services.AddScoped<IPythonImportConverter, PythonImportConverter>();
         services.AddGitHubRepositoriesReleasesUtilAsScoped();
 
