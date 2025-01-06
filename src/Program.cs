@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Soenneker.Config.Realtime;
-using Soenneker.Config.Realtime.Registrars;
 using Soenneker.Enums.DeployEnvironment;
 using Soenneker.Extensions.LoggerConfiguration;
 using Soenneker.Extensions.String;
@@ -56,20 +54,15 @@ public class Program
 
         LoggerConfigExtension.BuildBootstrapLoggerAndSetGlobally(envEnum);
 
-        RealtimeConfigurationProvider provider = null!;
-
         IHostBuilder host = Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostingContext, builder) =>
             {
                 builder.SetBasePath(hostingContext.HostingEnvironment.ContentRootPath);
 
-                provider = builder.AddRealtimeConfiguration();
-
                 builder.Build();
             })
             .UseSerilog()
             .ConfigureServices((_, services) => {
-                services.AddRealtimeConfigurationProviderAsSingleton(provider);
                 Startup.ConfigureServices(services); });
 
         return host;

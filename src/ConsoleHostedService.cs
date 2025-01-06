@@ -4,8 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Soenneker.Config.Realtime.Abstract;
-using Soenneker.GitHub.Repositories.Releases.Abstract;
 using Soenneker.Managers.Runners.Abstract;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
 
@@ -18,19 +16,15 @@ public class ConsoleHostedService : IHostedService
     private readonly IHostApplicationLifetime _appLifetime;
     private readonly IRunnersManager _runnersManager;
     private readonly IBuildLibraryUtil _buildLibraryUtil;
-    private readonly IGitHubRepositoriesReleasesUtil _releasesUtil;
-    private readonly IRealtimeConfigurationProvider _configProvider;
 
     private int? _exitCode;
 
     public ConsoleHostedService(ILogger<ConsoleHostedService> logger, IHostApplicationLifetime appLifetime,
-        IBuildLibraryUtil buildLibraryUtil, IGitHubRepositoriesReleasesUtil releasesUtil, IRealtimeConfigurationProvider configProvider, IRunnersManager runnersManager)
+        IBuildLibraryUtil buildLibraryUtil, IRunnersManager runnersManager)
     {
         _logger = logger;
         _appLifetime = appLifetime;
         _buildLibraryUtil = buildLibraryUtil;
-        _releasesUtil = releasesUtil;
-        _configProvider = configProvider;
         _runnersManager = runnersManager;
     }
 

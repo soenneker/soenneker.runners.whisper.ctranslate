@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Soenneker.GitHub.Repositories.Releases.Registrars;
 using Soenneker.Managers.Runners.Registrars;
 using Soenneker.Runners.Whisper.CTranslate.Utils;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
@@ -23,7 +22,6 @@ public static class Startup
         services.AddRunnersManagerAsScoped();
         services.AddScoped<IBuildLibraryUtil, BuildLibraryUtil>();
         services.AddScoped<IPythonImportConverter, PythonImportConverter>();
-        services.AddGitHubRepositoriesReleasesUtilAsScoped();
 
         return services;
     }
