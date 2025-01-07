@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Soenneker.Managers.Runners.Registrars;
+using Soenneker.Python.Utils.File.Registrars;
 using Soenneker.Runners.Whisper.CTranslate.Utils;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
 
@@ -21,7 +22,7 @@ public static class Startup
         services.AddHostedService<ConsoleHostedService>();
         services.AddRunnersManagerAsScoped();
         services.AddScoped<IBuildLibraryUtil, BuildLibraryUtil>();
-        services.AddScoped<IPythonImportConverter, PythonImportConverter>();
+        services.AddPythonFileUtilAsScoped();
 
         return services;
     }

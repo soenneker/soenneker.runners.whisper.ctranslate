@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Soenneker.Git.Util.Abstract;
+using Soenneker.Python.Utils.File.Abstract;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
 using Soenneker.Utils.Directory.Abstract;
 using Soenneker.Utils.Process.Abstract;
@@ -16,15 +17,15 @@ public class BuildLibraryUtil : IBuildLibraryUtil
     private readonly IGitUtil _gitUtil;
     private readonly IDirectoryUtil _directoryUtil;
     private readonly IProcessUtil _processUtil;
-    private readonly IPythonImportConverter _pythonImportConverter;
+    private readonly IPythonFileUtil _pythonFileUtil;
 
-    public BuildLibraryUtil(ILogger<BuildLibraryUtil> logger, IGitUtil gitUtil, IDirectoryUtil directoryUtil, IProcessUtil processUtil, IPythonImportConverter pythonImportConverter)
+    public BuildLibraryUtil(ILogger<BuildLibraryUtil> logger, IGitUtil gitUtil, IDirectoryUtil directoryUtil, IProcessUtil processUtil, IPythonFileUtil pythonFileUtil)
     {
         _logger = logger;
         _gitUtil = gitUtil;
         _directoryUtil = directoryUtil;
         _processUtil = processUtil;
-        _pythonImportConverter = pythonImportConverter;
+        _pythonFileUtil = pythonFileUtil;
     }
 
     public async ValueTask<string> Build(CancellationToken cancellationToken)
@@ -53,7 +54,7 @@ public class BuildLibraryUtil : IBuildLibraryUtil
 
         string scriptDir = Path.Combine(tempDir, "src", "whisper_ctranslate2");
 
-        await _pythonImportConverter.ConvertRelativeImports(scriptDir);
+        await _pythonFileUtil.ConvertRelativeImports(scriptDir, cancellationToken);
 
         string entryScript = Path.Combine(scriptDir, "whisper_ctranslate2.py");
 
