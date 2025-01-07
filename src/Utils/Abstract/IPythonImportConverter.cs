@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Soenneker.Runners.Whisper.CTranslate.Utils.Abstract
+namespace Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
+
+public interface IPythonImportConverter
 {
-    public interface IPythonImportConverter
-    {
-        Task ConvertRelativeImportsAsync(string directory);
-    }
+    ValueTask ConvertRelativeImports(string directory);
 }

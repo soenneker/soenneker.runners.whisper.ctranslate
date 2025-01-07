@@ -53,7 +53,7 @@ public class BuildLibraryUtil : IBuildLibraryUtil
 
         string scriptDir = Path.Combine(tempDir, "src", "whisper_ctranslate2");
 
-        await _pythonImportConverter.ConvertRelativeImportsAsync(scriptDir);
+        await _pythonImportConverter.ConvertRelativeImports(scriptDir);
 
         string entryScript = Path.Combine(scriptDir, "whisper_ctranslate2.py");
 
