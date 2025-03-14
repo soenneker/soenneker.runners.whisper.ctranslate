@@ -5,8 +5,13 @@
   "autoApprove": true,
   "packageRules": [
     {
-        "matchDepNames": [ "actions/setup-python" ],
-        "enabled": false
+      "matchDepNames": [ "actions/setup-python" ],
+      "enabled": false
+    },
+    {
+      "matchManagers": [ "github-actions" ],
+      "matchDepNames": [ "python" ],
+      "enabled": false
     }
   ]
 }
