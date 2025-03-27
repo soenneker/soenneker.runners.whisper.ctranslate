@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Soenneker.Extensions.Task;
 
 namespace Soenneker.Runners.Whisper.CTranslate.Utils;
 
@@ -32,7 +33,7 @@ public class BuildLibraryUtil : IBuildLibraryUtil
     {
         string tempDir = _directoryUtil.CreateTempDirectory();
 
-        string python = await GetPythonPath();
+        string python = await GetPythonPath(cancellationToken: cancellationToken);
 
         _logger.LogInformation("Python path: {path}", python); 
 
@@ -63,7 +64,7 @@ public class BuildLibraryUtil : IBuildLibraryUtil
         return Path.Combine(tempDir, "dist", "whisper_ctranslate2.exe");
     }
 
-    public static async ValueTask<string> GetPythonPath(string pythonCommand = "python")
+    public static async ValueTask<string> GetPythonPath(string pythonCommand = "python", CancellationToken cancellationToken = default)
     {
         var processStartInfo = new ProcessStartInfo
         {
@@ -74,15 +75,13 @@ public class BuildLibraryUtil : IBuildLibraryUtil
             CreateNoWindow = true
         };
 
-        using (var process = new Process())
-        {
-            process.StartInfo = processStartInfo;
-            process.Start();
+        using var process = new Process();
+        process.StartInfo = processStartInfo;
+        process.Start();
 
-            string output = await process.StandardOutput.ReadToEndAsync();
-            await process.WaitForExitAsync();
+        string output = await process.StandardOutput.ReadToEndAsync(cancellationToken).NoSync();
+        await process.WaitForExitAsync(cancellationToken).NoSync();
 
-            return output.Trim(); // The full path to Python
-        }
+        return output.Trim(); // The full path to Python
     }
 }
