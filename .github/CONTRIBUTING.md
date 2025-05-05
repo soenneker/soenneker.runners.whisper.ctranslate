@@ -1,4 +1,4 @@
-# Contributing to Soenneker.Runners.Whisper.CTranslate
+﻿# Contributing to Soenneker.Runners.Whisper.CTranslate
 
 We're excited that you're interested in contributing!
 
