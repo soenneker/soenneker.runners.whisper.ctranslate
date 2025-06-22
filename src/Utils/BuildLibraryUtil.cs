@@ -12,7 +12,7 @@ using Soenneker.Extensions.Task;
 
 namespace Soenneker.Runners.Whisper.CTranslate.Utils;
 
-public class BuildLibraryUtil : IBuildLibraryUtil
+public sealed class BuildLibraryUtil : IBuildLibraryUtil
 {
     private readonly ILogger<BuildLibraryUtil> _logger;
     private readonly IGitUtil _gitUtil;
@@ -31,7 +31,7 @@ public class BuildLibraryUtil : IBuildLibraryUtil
 
     public async ValueTask<string> Build(CancellationToken cancellationToken)
     {
-        string tempDir = _directoryUtil.CreateTempDirectory();
+        string tempDir = await _directoryUtil.CreateTempDirectory(cancellationToken);
 
         string python = await GetPythonPath(cancellationToken: cancellationToken);
 
