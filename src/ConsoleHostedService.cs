@@ -9,7 +9,7 @@ using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
 
 namespace Soenneker.Runners.Whisper.CTranslate;
 
-public class ConsoleHostedService : IHostedService
+public sealed class ConsoleHostedService : IHostedService
 {
     private readonly ILogger<ConsoleHostedService> _logger;
 
