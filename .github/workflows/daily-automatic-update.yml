@@ -65,4 +65,4 @@ jobs:
 
       - name: Run
         shell: pwsh
-        run: dotnet run --project src/Soenneker.Runners.Whisper.CTranslate.csproj --no-restore --verbosity normal --framework net9.0
+        run: dotnet run --project src/Soenneker.Runners.Whisper.CTranslate.csproj --no-restore --verbosity normal --framework net9.0 -c Release
