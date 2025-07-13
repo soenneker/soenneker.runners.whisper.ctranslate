@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Soenneker.Managers.Runners.Registrars;
+using Soenneker.Python.Util.Registrars;
 using Soenneker.Python.Utils.File.Registrars;
 using Soenneker.Runners.Whisper.CTranslate.Utils;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
@@ -19,10 +20,11 @@ public static class Startup
 
     public static IServiceCollection SetupIoC(this IServiceCollection services)
     {
-        services.AddHostedService<ConsoleHostedService>();
-        services.AddRunnersManagerAsScoped();
-        services.AddScoped<IBuildLibraryUtil, BuildLibraryUtil>();
-        services.AddPythonFileUtilAsScoped();
+        services.AddHostedService<ConsoleHostedService>()
+                .AddRunnersManagerAsScoped()
+                .AddPythonUtilAsScoped()
+                .AddScoped<IBuildLibraryUtil, BuildLibraryUtil>()
+                .AddPythonFileUtilAsScoped();
 
         return services;
     }
