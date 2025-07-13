@@ -54,11 +54,6 @@ jobs:
               }
           }
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12' # Specify the Python version
-
       - name: Build
         shell: pwsh
         run: dotnet build --configuration Release --no-restore

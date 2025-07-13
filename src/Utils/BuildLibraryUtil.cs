@@ -23,8 +23,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
     private readonly IPythonFileUtil _pythonFileUtil;
     private readonly IPythonUtil _pythonUtil;
 
-    private const string _pyInstallerBootloaderKey = "4D3A1F8C2B5E9A6D7C0F1A9B3E5C8D4A";
-    private string _tempDir = Path.Combine(Path.GetTempPath(), "58b21c74-fb9e-4ffa-9541-54e3723a81d4"); // because build path matters
+    private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "58b21c74-fb9e-4ffa-9541-54e3723a81d4"); // because build path matters
 
     // A dictionary of environment variables required for a reproducible PyInstaller build.
     private static readonly Dictionary<string, string> _deterministicBuildEnvVars = new()
@@ -50,11 +49,11 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
         _pythonUtil = pythonUtil;
     }
 
-    public async ValueTask<string> Build(CancellationToken cancellationToken)
+    public async ValueTask<string> Build(CancellationToken cancellationToken = default)
     {
-       _directoryUtil.CreateIfDoesNotExist(_tempDir);
+        string python = await _pythonUtil.EnsureInstalled("3.12", true, cancellationToken);
 
-        string python = await _pythonUtil.GetPythonPath(cancellationToken: cancellationToken);
+       _directoryUtil.CreateIfDoesNotExist(_tempDir);
 
         _logger.LogInformation("Python path: {path}", python);
 
@@ -89,7 +88,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
         _logger.LogInformation("Building executable with PyInstaller under a controlled environment...");
 
         var buildArgs =
-            $"-m PyInstaller --onefile --key {_pyInstallerBootloaderKey} --clean --noupx \"{entryScript}\"";
+            $"-m PyInstaller --onefile --clean \"{entryScript}\"";
 
         await _processUtil.Start(python, _tempDir, buildArgs, waitForExit: true, cancellationToken: cancellationToken);
 
