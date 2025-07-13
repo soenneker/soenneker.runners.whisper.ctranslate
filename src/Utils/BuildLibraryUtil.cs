@@ -59,7 +59,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
 
         _logger.LogInformation("Python path: {path}", python);
 
-        _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", tempDir);
+        await _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", tempDir, cancellationToken: cancellationToken);
 
         await _processUtil.Start(python, tempDir, "-m pip install --upgrade pip", waitForExit: true, cancellationToken: cancellationToken);
 
@@ -82,7 +82,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
         string entryScript = Path.Combine(scriptDir, "whisper_ctranslate2.py");
 
         _logger.LogInformation("Setting environment variables for deterministic build...");
-        foreach (var kvp in DeterministicBuildEnvVars)
+        foreach (KeyValuePair<string, string> kvp in DeterministicBuildEnvVars)
         {
             Environment.SetEnvironmentVariable(kvp.Key, kvp.Value);
         }
