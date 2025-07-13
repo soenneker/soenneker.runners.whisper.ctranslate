@@ -10,6 +10,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Soenneker.Python.Util.Abstract;
+using Soenneker.Utils.File.Abstract;
+using Soenneker.Extensions.String;
+using Soenneker.Extensions.ValueTask;
 
 namespace Soenneker.Runners.Whisper.CTranslate.Utils;
 
@@ -22,11 +25,15 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
     private readonly IProcessUtil _processUtil;
     private readonly IPythonFileUtil _pythonFileUtil;
     private readonly IPythonUtil _pythonUtil;
+    private readonly IFileUtil _fileUtil;
 
     // because build path matters
+    private readonly string _gitDir = Path.Combine(Path.GetTempPath(), "81206ad6-b03f-4b46-a5c0-c637026409c5");
     private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "58b21c74-fb9e-4ffa-9541-54e3723a81d4");
 
     private const string _epochDate = "1640995200";
+
+    private static readonly DateTime _epochUtc = DateTimeOffset.FromUnixTimeSeconds(_epochDate.ToInt()).UtcDateTime;
 
     // A dictionary of environment variables required for a reproducible PyInstaller build.
     private readonly Dictionary<string, string> _deterministicBuildEnvVars = new()
@@ -42,7 +49,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
     };
 
     public BuildLibraryUtil(ILogger<BuildLibraryUtil> logger, IGitUtil gitUtil, IDirectoryUtil directoryUtil, IProcessUtil processUtil,
-        IPythonFileUtil pythonFileUtil, IPythonUtil pythonUtil)
+        IPythonFileUtil pythonFileUtil, IPythonUtil pythonUtil, IFileUtil fileUtil)
     {
         _logger = logger;
         _gitUtil = gitUtil;
@@ -50,6 +57,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
         _processUtil = processUtil;
         _pythonFileUtil = pythonFileUtil;
         _pythonUtil = pythonUtil;
+        _fileUtil = fileUtil;
     }
 
     public async ValueTask<string> Build(CancellationToken cancellationToken = default)
@@ -62,17 +70,15 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
 
         string python = await _pythonUtil.EnsureInstalled("3.12", true, cancellationToken);
 
-        _directoryUtil.CreateIfDoesNotExist(_tempDir);
+        _directoryUtil.CreateIfDoesNotExist(_gitDir);
 
         _logger.LogInformation("Python path: {path}", python);
 
-        await _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", _tempDir, cancellationToken: cancellationToken);
+        await _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", _gitDir, cancellationToken: cancellationToken);
 
-        // 💥 nuke .git so setuptools_scm can’t see it
-        _directoryUtil.Delete(Path.Combine(_tempDir, ".git"));
+        _directoryUtil.CreateIfDoesNotExist(_tempDir);
 
-        // 🎯 keep every source file’s mtime fixed
-        await _processUtil.BashRun($"find . -type f -print0 | xargs -0 touch -d @{_epochDate}", _tempDir, cancellationToken: cancellationToken);
+        await CopyDirectoryExceptGit(_gitDir, _tempDir, cancellationToken).NoSync();
 
         await _processUtil.Start(python, _tempDir, "-m pip install --upgrade pip", waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
             cancellationToken: cancellationToken);
@@ -101,7 +107,6 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
 
         string entryScript = Path.Combine(scriptDir, "whisper_ctranslate2.py");
 
-
         _logger.LogInformation("Building executable with PyInstaller under a controlled environment...");
 
         var buildArgs = $"-m PyInstaller --onefile --clean \"{entryScript}\"";
@@ -110,5 +115,31 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
             cancellationToken: cancellationToken);
 
         return Path.Combine(_tempDir, "dist", "whisper_ctranslate2.exe");
+    }
+
+    private async ValueTask CopyDirectoryExceptGit(string sourceDir, string destDir, CancellationToken cancellationToken = default)
+    {
+        // 1. Recreate directory tree
+        foreach (string dir in Directory.EnumerateDirectories(sourceDir, "*", SearchOption.AllDirectories))
+        {
+            if (dir.Contains($"{Path.DirectorySeparatorChar}.git{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            string targetDir = dir.Replace(sourceDir, destDir, StringComparison.Ordinal);
+            _directoryUtil.CreateIfDoesNotExist(targetDir);
+        }
+
+        // 2. Copy files
+        foreach (string file in Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories))
+        {
+            if (file.Contains($"{Path.DirectorySeparatorChar}.git{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            string targetFile = file.Replace(sourceDir, destDir, StringComparison.Ordinal);
+            await _fileUtil.Copy(file, targetFile, true, cancellationToken).NoSync();
+
+            // normalise timestamp so PyInstaller’s .pyc headers are consistent
+            File.SetLastWriteTimeUtc(targetFile, _epochUtc);
+        }
     }
 }
