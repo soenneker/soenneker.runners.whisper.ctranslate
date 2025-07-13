@@ -23,19 +23,22 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
     private readonly IPythonFileUtil _pythonFileUtil;
     private readonly IPythonUtil _pythonUtil;
 
-    private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "58b21c74-fb9e-4ffa-9541-54e3723a81d4"); // because build path matters
+    // because build path matters
+    private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "58b21c74-fb9e-4ffa-9541-54e3723a81d4");
+
+    private const string _epochDate = "1640995200";
 
     // A dictionary of environment variables required for a reproducible PyInstaller build.
-    private static readonly Dictionary<string, string> _deterministicBuildEnvVars = new()
+    private readonly Dictionary<string, string> _deterministicBuildEnvVars = new()
     {
         // SOURCE_DATE_EPOCH: A standard variable that many build tools respect. It sets a
         // fixed timestamp (Jan 1, 2022) for the build, removing timestamp-based randomness.
-        {"SOURCE_DATE_EPOCH", "1640995200"},
+        {"SOURCE_DATE_EPOCH", _epochDate},
 
-        // PYTHONHASHSEED: Setting this to '0' disables Python's hash randomization.
+        // PYTHONHASHSEED: Setting this to '1' disables Python's hash randomization.
         // This ensures that dictionaries and sets have a consistent order, which is
         // critical for making sure PyInstaller packs files in the same order every time.
-        {"PYTHONHASHSEED", "0"}
+        {"PYTHONHASHSEED", "1"}
     };
 
     public BuildLibraryUtil(ILogger<BuildLibraryUtil> logger, IGitUtil gitUtil, IDirectoryUtil directoryUtil, IProcessUtil processUtil,
@@ -51,27 +54,46 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
 
     public async ValueTask<string> Build(CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("Setting environment variables for deterministic build...");
+        foreach (KeyValuePair<string, string> kvp in _deterministicBuildEnvVars)
+        {
+            Environment.SetEnvironmentVariable(kvp.Key, kvp.Value);
+        }
+
         string python = await _pythonUtil.EnsureInstalled("3.12", true, cancellationToken);
 
-       _directoryUtil.CreateIfDoesNotExist(_tempDir);
+        _directoryUtil.CreateIfDoesNotExist(_tempDir);
 
         _logger.LogInformation("Python path: {path}", python);
 
         await _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", _tempDir, cancellationToken: cancellationToken);
 
-        await _processUtil.Start(python, _tempDir, "-m pip install --upgrade pip", waitForExit: true, cancellationToken: cancellationToken);
+        // 💥 nuke .git so setuptools_scm can’t see it
+        _directoryUtil.Delete(Path.Combine(_tempDir, ".git"));
 
-        await _processUtil.Start(python, _tempDir, "-m pip install pip-review", waitForExit: true, cancellationToken: cancellationToken);
+        // 🎯 keep every source file’s mtime fixed
+        await _processUtil.BashRun($"find . -type f -print0 | xargs -0 touch -d @{_epochDate}", _tempDir, cancellationToken: cancellationToken);
 
-        await _processUtil.Start(python, _tempDir, "-m site", waitForExit: true, cancellationToken: cancellationToken);
+        await _processUtil.Start(python, _tempDir, "-m pip install --upgrade pip", waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
+            cancellationToken: cancellationToken);
 
-        await _processUtil.Start(python, _tempDir, "-m pip_review --local --auto", waitForExit: true, cancellationToken: cancellationToken);
+        await _processUtil.Start(python, _tempDir, "-m pip install pip-review", waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
+            cancellationToken: cancellationToken);
 
-        await _processUtil.Start(python, _tempDir, "-m pip install setuptools wheel build PyInstaller", waitForExit: true, cancellationToken: cancellationToken);
+        await _processUtil.Start(python, _tempDir, "-m site", waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
+            cancellationToken: cancellationToken);
 
-        await _processUtil.Start(python, _tempDir, "-m pip install -r requirements.txt", waitForExit: true, cancellationToken: cancellationToken);
+        await _processUtil.Start(python, _tempDir, "-m pip_review --local --auto", waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
+            cancellationToken: cancellationToken);
 
-        await _processUtil.Start(python, _tempDir, "setup.py sdist bdist_wheel", waitForExit: true, cancellationToken: cancellationToken);
+        await _processUtil.Start(python, _tempDir, "-m pip install setuptools wheel build PyInstaller", waitForExit: true,
+            environmentalVars: _deterministicBuildEnvVars, cancellationToken: cancellationToken);
+
+        await _processUtil.Start(python, _tempDir, "-m pip install -r requirements.txt", waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
+            cancellationToken: cancellationToken);
+
+        await _processUtil.Start(python, _tempDir, "setup.py sdist bdist_wheel", waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
+            cancellationToken: cancellationToken);
 
         string scriptDir = Path.Combine(_tempDir, "src", "whisper_ctranslate2");
 
@@ -79,18 +101,13 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
 
         string entryScript = Path.Combine(scriptDir, "whisper_ctranslate2.py");
 
-        _logger.LogInformation("Setting environment variables for deterministic build...");
-        foreach (KeyValuePair<string, string> kvp in _deterministicBuildEnvVars)
-        {
-            Environment.SetEnvironmentVariable(kvp.Key, kvp.Value);
-        }
 
         _logger.LogInformation("Building executable with PyInstaller under a controlled environment...");
 
-        var buildArgs =
-            $"-m PyInstaller --onefile --clean \"{entryScript}\"";
+        var buildArgs = $"-m PyInstaller --onefile --clean \"{entryScript}\"";
 
-        await _processUtil.Start(python, _tempDir, buildArgs, waitForExit: true, cancellationToken: cancellationToken);
+        await _processUtil.Start(python, _tempDir, buildArgs, waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
+            cancellationToken: cancellationToken);
 
         return Path.Combine(_tempDir, "dist", "whisper_ctranslate2.exe");
     }
