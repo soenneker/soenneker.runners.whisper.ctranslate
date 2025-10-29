@@ -1,4 +1,4 @@
-name: daily-automatic-update
+﻿name: daily-automatic-update
 on:
   schedule:
     - cron: "0 17 * * *"
@@ -24,7 +24,7 @@ jobs:
         shell: pwsh
         run: |
           $version = $env:GITHUB_RUN_NUMBER
-          "BUILD_VERSION=3.0.$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "BUILD_VERSION=4.0.$version" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -60,4 +60,4 @@ jobs:
 
       - name: Run
         shell: pwsh
-        run: dotnet run --project src/Soenneker.Runners.Whisper.CTranslate.csproj --no-restore --verbosity normal --framework net9.0 -c Release
+        run: dotnet run --project src/Soenneker.Runners.Whisper.CTranslate.csproj --no-restore --verbosity normal --framework net10.0 -c Release
