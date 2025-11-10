@@ -21,23 +21,28 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Install dependencies with retry
+        shell: bash
         run: |
           retries=5
           base_wait_time=15
           exponent=2
 
           for i in $(seq 1 $retries); do
-            if dotnet restore; then
+            echo "::group::dotnet restore (attempt $i/$retries)"
+            if dotnet restore -v detailed; then
+              echo "::endgroup::"
+              echo "✅ dotnet restore succeeded on attempt $i."
               break
-            fi
-
-            if [ $i -lt $retries ]; then
-              wait_time=$(awk "BEGIN {print int($base_wait_time * ($exponent ^ ($i - 1)))}")
-              echo "dotnet restore failed, retrying in $wait_time seconds..."
-              sleep $wait_time
             else
-              echo "dotnet restore failed after $retries retries."
-              exit 1
+              echo "::endgroup::"
+              if [ "$i" -lt "$retries" ]; then
+                wait_time=$(( base_wait_time * (exponent ** (i - 1)) ))
+                echo "❌ dotnet restore failed (attempt $i). Retrying in ${wait_time}s…"
+                sleep "$wait_time"
+              else
+                echo "::error::dotnet restore failed after $retries attempts"
+                exit 1
+              fi
             fi
           done
 
