@@ -52,7 +52,7 @@ public class Program
     {
         DeployEnvironment envEnum = DeployEnvironment.FromName(_environment);
 
-        LoggerConfigurationExtension.BuildBootstrapLoggerAndSetGlobally(envEnum);
+        LoggerConfigurationExtension.BuildBootstrapLoggerAndSetGloballySync(envEnum);
 
         IHostBuilder host = Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostingContext, builder) =>
