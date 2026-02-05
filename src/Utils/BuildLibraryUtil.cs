@@ -70,13 +70,13 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
 
         string python = await _pythonUtil.EnsureInstalled("3.12", true, cancellationToken);
 
-        _directoryUtil.CreateIfDoesNotExist(_gitDir);
+        await _directoryUtil.CreateIfDoesNotExist(_gitDir, cancellationToken: cancellationToken);
 
         _logger.LogInformation("Python path: {path}", python);
 
         await _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", _gitDir, cancellationToken: cancellationToken);
 
-        _directoryUtil.CreateIfDoesNotExist(_tempDir);
+        await _directoryUtil.CreateIfDoesNotExist(_tempDir, cancellationToken: cancellationToken);
 
         await CopyDirectoryExceptGit(_gitDir, _tempDir, cancellationToken).NoSync();
 
@@ -109,7 +109,8 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
 
         _logger.LogInformation("Building executable with PyInstaller under a controlled environment...");
 
-        var buildArgs = $"-m PyInstaller --onefile --clean \"{entryScript}\"";
+        string srcDir = Path.Combine(_tempDir, "src");
+        var buildArgs = $"-m PyInstaller --onefile --clean --paths \"{srcDir}\" \"{entryScript}\"";
 
         await _processUtil.Start(python, _tempDir, buildArgs, waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
             cancellationToken: cancellationToken);
@@ -126,7 +127,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
                 continue;
 
             string targetDir = dir.Replace(sourceDir, destDir, StringComparison.Ordinal);
-            _directoryUtil.CreateIfDoesNotExist(targetDir);
+            await _directoryUtil.CreateIfDoesNotExist(targetDir, cancellationToken: cancellationToken);
         }
 
         // 2. Copy files
