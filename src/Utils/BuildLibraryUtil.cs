@@ -110,7 +110,10 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
         _logger.LogInformation("Building executable with PyInstaller under a controlled environment...");
 
         string srcDir = Path.Combine(_tempDir, "src");
-        var buildArgs = $"-m PyInstaller --onefile --clean --paths \"{srcDir}\" \"{entryScript}\"";
+        string buildArgs =
+            $"-m PyInstaller --onefile --clean --paths \"{srcDir}\" " +
+            $"--collect-all faster_whisper " +
+            $"\"{entryScript}\"";
 
         await _processUtil.Start(python, _tempDir, buildArgs, waitForExit: true, environmentalVars: _deterministicBuildEnvVars,
             cancellationToken: cancellationToken);
