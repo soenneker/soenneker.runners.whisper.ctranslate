@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Soenneker.Git.Util.Abstract;
 using Soenneker.Python.Utils.File.Abstract;
 using Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
@@ -124,7 +124,8 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
     private async ValueTask CopyDirectoryExceptGit(string sourceDir, string destDir, CancellationToken cancellationToken = default)
     {
         // 1. Recreate directory tree
-        foreach (string dir in Directory.EnumerateDirectories(sourceDir, "*", SearchOption.AllDirectories))
+        List<string> dirs = await _directoryUtil.GetAllDirectoriesRecursively(sourceDir, cancellationToken);
+        foreach (string dir in dirs)
         {
             if (dir.Contains($"{Path.DirectorySeparatorChar}.git{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
                 continue;
@@ -134,7 +135,8 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
         }
 
         // 2. Copy files
-        foreach (string file in Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories))
+        List<string> files = await _directoryUtil.GetFilesByExtension(sourceDir, "", true, cancellationToken);
+        foreach (string file in files)
         {
             if (file.Contains($"{Path.DirectorySeparatorChar}.git{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
                 continue;
