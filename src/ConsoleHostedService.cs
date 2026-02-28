@@ -40,7 +40,7 @@ public sealed class ConsoleHostedService : IHostedService
                 {
                     string filePath = await _buildLibraryUtil.Build(cancellationToken);
 
-                    await _runnersManager.PushIfChangesNeeded(filePath, Constants.FileName, Constants.Library, $"https://github.com/soenneker/{Constants.Library}", cancellationToken);
+                    await _runnersManager.PushIfChangesNeeded(filePath, Constants.FileName, Constants.Library, $"https://github.com/soenneker/{Constants.Library}", false, cancellationToken);
 
                     _logger.LogInformation("Complete!");
 

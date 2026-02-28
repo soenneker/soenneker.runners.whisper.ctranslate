@@ -70,13 +70,13 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
 
         string python = await _pythonUtil.EnsureInstalled("3.12", true, cancellationToken);
 
-        await _directoryUtil.CreateIfDoesNotExist(_gitDir, cancellationToken: cancellationToken);
+        await _directoryUtil.Create(_gitDir, cancellationToken: cancellationToken);
 
         _logger.LogInformation("Python path: {path}", python);
 
         await _gitUtil.Clone("https://github.com/Softcatala/whisper-ctranslate2", _gitDir, cancellationToken: cancellationToken);
 
-        await _directoryUtil.CreateIfDoesNotExist(_tempDir, cancellationToken: cancellationToken);
+        await _directoryUtil.Create(_tempDir, cancellationToken: cancellationToken);
 
         await CopyDirectoryExceptGit(_gitDir, _tempDir, cancellationToken).NoSync();
 
@@ -131,7 +131,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
                 continue;
 
             string targetDir = dir.Replace(sourceDir, destDir, StringComparison.Ordinal);
-            await _directoryUtil.CreateIfDoesNotExist(targetDir, cancellationToken: cancellationToken);
+            await _directoryUtil.Create(targetDir, cancellationToken: cancellationToken);
         }
 
         // 2. Copy files
