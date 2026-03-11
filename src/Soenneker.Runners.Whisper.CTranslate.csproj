@@ -45,7 +45,7 @@
         <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="4.0.1193" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.4" />
         <PackageReference Include="Soenneker.Managers.Runners" Version="4.0.1910" />
-        <PackageReference Include="Soenneker.Python.Util" Version="4.0.184" />
+        <PackageReference Include="Soenneker.Python.Util" Version="4.0.186" />
         <PackageReference Include="Soenneker.Python.Utils.File" Version="4.0.566" />
     </ItemGroup>
 </Project>
