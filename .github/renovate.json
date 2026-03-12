@@ -3,6 +3,7 @@
   "automerge": true,
   "prHourlyLimit": 0,
   "autoApprove": true,
+  "semanticCommits": "disabled",
   "packageRules": [
     {
       "matchDepNames": [ "actions/setup-python" ],
