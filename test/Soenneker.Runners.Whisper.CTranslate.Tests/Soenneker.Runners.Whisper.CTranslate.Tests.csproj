@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Runners.Whisper.CTranslate.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Runners.Whisper.CTranslate\Soenneker.Runners.Whisper.CTranslate.csproj" />
     </ItemGroup>
 
     <ItemGroup>
