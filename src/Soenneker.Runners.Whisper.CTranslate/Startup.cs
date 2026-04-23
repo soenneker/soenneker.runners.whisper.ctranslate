@@ -21,10 +21,10 @@ public static class Startup
     public static IServiceCollection SetupIoC(this IServiceCollection services)
     {
         services.AddHostedService<ConsoleHostedService>()
-                .AddRunnersManagerAsScoped()
-                .AddPythonUtilAsScoped()
-                .AddScoped<IBuildLibraryUtil, BuildLibraryUtil>()
-                .AddPythonFileUtilAsScoped();
+                .AddRunnersManagerAsSingleton()
+                .AddPythonUtilAsSingleton()
+                .AddSingleton<IBuildLibraryUtil, BuildLibraryUtil>()
+                .AddPythonFileUtilAsSingleton();
 
         return services;
     }
