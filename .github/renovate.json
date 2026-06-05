@@ -4,14 +4,12 @@
   "prHourlyLimit": 0,
   "autoApprove": true,
   "semanticCommits": "disabled",
+  "rangeStrategy": "bump",
   "packageRules": [
     {
-      "matchDepNames": [ "actions/setup-python" ],
-      "enabled": false
-    },
-    {
-      "matchManagers": [ "github-actions" ],
-      "matchDepNames": [ "python" ],
+      "description": "Do not update exact NuGet pins like [1.2.3]",
+      "matchManagers": [ "nuget" ],
+      "matchCurrentValue": "/^\\[[^,]+\\]$/",
       "enabled": false
     }
   ]
