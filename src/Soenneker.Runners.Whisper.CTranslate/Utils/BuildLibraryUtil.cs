@@ -16,7 +16,7 @@ using Soenneker.Extensions.ValueTask;
 
 namespace Soenneker.Runners.Whisper.CTranslate.Utils;
 
-///<inheritdoc cref="IBuildLibraryUtil"/>
+/// <inheritdoc cref="IBuildLibraryUtil"/>
 public sealed class BuildLibraryUtil : IBuildLibraryUtil
 {
     private readonly ILogger<BuildLibraryUtil> _logger;
