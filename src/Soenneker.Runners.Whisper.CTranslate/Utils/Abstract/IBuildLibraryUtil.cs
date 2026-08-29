@@ -9,9 +9,9 @@ namespace Soenneker.Runners.Whisper.CTranslate.Utils.Abstract;
 public interface IBuildLibraryUtil
 {
     /// <summary>
-    /// Executes the build operation.
+    /// Builds build Library.
     /// </summary>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task containing the result of the operation.</returns>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
+    /// <returns>A task whose result is the text returned by build.</returns>
     ValueTask<string> Build(CancellationToken cancellationToken);
 }
