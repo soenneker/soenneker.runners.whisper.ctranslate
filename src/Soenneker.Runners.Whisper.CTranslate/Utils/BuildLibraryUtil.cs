@@ -16,7 +16,6 @@ using Soenneker.Extensions.ValueTask;
 
 namespace Soenneker.Runners.Whisper.CTranslate.Utils;
 
-/// <inheritdoc cref="IBuildLibraryUtil"/>
 public sealed class BuildLibraryUtil : IBuildLibraryUtil
 {
     private readonly ILogger<BuildLibraryUtil> _logger;
@@ -69,6 +68,9 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
         }
 
         string python = await _pythonUtil.EnsureInstalled("3.12", true, cancellationToken);
+
+        await _directoryUtil.DeleteIfExists(_gitDir, cancellationToken);
+        await _directoryUtil.DeleteIfExists(_tempDir, cancellationToken);
 
         await _directoryUtil.Create(_gitDir, cancellationToken: cancellationToken);
 
