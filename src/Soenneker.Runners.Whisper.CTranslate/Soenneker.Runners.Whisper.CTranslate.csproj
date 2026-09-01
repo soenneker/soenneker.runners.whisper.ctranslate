@@ -41,11 +41,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="4.0.1351" />
+        <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="4.0.1352" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.11" />
-        <PackageReference Include="Soenneker.Managers.Runners" Version="4.0.2424" />
-        <PackageReference Include="Soenneker.Python.Util" Version="4.0.368" />
-        <PackageReference Include="Soenneker.Python.Utils.File" Version="4.0.717" />
+        <PackageReference Include="Soenneker.Managers.Runners" Version="4.0.2425" />
+        <PackageReference Include="Soenneker.Python.Util" Version="4.0.369" />
+        <PackageReference Include="Soenneker.Python.Utils.File" Version="4.0.718" />
         <PackageReference Include="Soenneker.Utils.File" Version="4.0.2246" />
     </ItemGroup>
 </Project>
