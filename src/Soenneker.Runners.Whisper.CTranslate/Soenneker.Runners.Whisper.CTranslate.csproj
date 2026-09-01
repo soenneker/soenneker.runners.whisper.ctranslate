@@ -46,5 +46,6 @@
         <PackageReference Include="Soenneker.Managers.Runners" Version="4.0.2421" />
         <PackageReference Include="Soenneker.Python.Util" Version="4.0.366" />
         <PackageReference Include="Soenneker.Python.Utils.File" Version="4.0.716" />
+        <PackageReference Include="Soenneker.Utils.File" Version="4.0.2245" />
     </ItemGroup>
 </Project>

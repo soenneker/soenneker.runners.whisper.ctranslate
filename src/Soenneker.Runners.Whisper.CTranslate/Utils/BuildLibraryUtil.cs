@@ -147,7 +147,7 @@ public sealed class BuildLibraryUtil : IBuildLibraryUtil
             await _fileUtil.Copy(file, targetFile, true, cancellationToken).NoSync();
 
             // normalise timestamp so PyInstaller’s .pyc headers are consistent
-            File.SetLastWriteTimeUtc(targetFile, _epochUtc);
+            await _fileUtil.SetLastWriteTimeUtc(targetFile, _epochUtc, cancellationToken);
         }
     }
 }
