@@ -49,7 +49,7 @@
         <PackageReference Include="Soenneker.Python.Utils.File" Version="4.0.773" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Soenneker.Enums.DeployEnvironment" Version="4.0.245" />
+        <PackageReference Include="Soenneker.Enums.DeployEnvironment" Version="4.0.246" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Soenneker.Extensions.ValueTask" Version="4.0.124" />
