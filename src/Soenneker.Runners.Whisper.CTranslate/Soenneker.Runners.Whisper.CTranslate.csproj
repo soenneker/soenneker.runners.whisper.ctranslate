@@ -42,14 +42,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="4.0.1425" />
+        <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="4.0.1437" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
-        <PackageReference Include="Soenneker.Managers.Runners" Version="4.0.2622" />
-        <PackageReference Include="Soenneker.Python.Util" Version="4.0.450" />
-        <PackageReference Include="Soenneker.Python.Utils.File" Version="4.0.785" />
+        <PackageReference Include="Soenneker.Managers.Runners" Version="4.0.2630" />
+        <PackageReference Include="Soenneker.Python.Util" Version="4.0.458" />
+        <PackageReference Include="Soenneker.Python.Utils.File" Version="4.0.791" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Soenneker.Enums.DeployEnvironment" Version="4.0.256" />
+        <PackageReference Include="Soenneker.Enums.DeployEnvironment" Version="4.0.258" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Soenneker.Extensions.ValueTask" Version="4.0.132" />
