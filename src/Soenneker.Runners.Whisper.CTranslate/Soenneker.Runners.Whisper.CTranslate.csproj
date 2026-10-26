@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
         <IsAotCompatible>true</IsAotCompatible>
         <Nullable>enable</Nullable>
         <Platforms>AnyCPU</Platforms>
@@ -10,7 +10,7 @@
 
     <PropertyGroup>
         <Description>Automatically updates the Soenneker.Libraries.Whisper.CTranslate package</Description>
-        <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
+        <Version Condition="'$(BUILD_VERSION)' == ''">11.0.0</Version>
         <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
         <AssemblyName>Soenneker.Runners.Whisper.CTranslate</AssemblyName>
         <PackageId>Soenneker.Runners.Whisper.CTranslate</PackageId>
@@ -43,7 +43,7 @@
 
     <ItemGroup>
         <PackageReference Include="Soenneker.Extensions.LoggerConfiguration" Version="4.0.1442" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="11.0.0-rc.3.26522.148" />
         <PackageReference Include="Soenneker.Managers.Runners" Version="4.0.2646" />
         <PackageReference Include="Soenneker.Python.Util" Version="4.0.465" />
         <PackageReference Include="Soenneker.Python.Utils.File" Version="4.0.797" />
